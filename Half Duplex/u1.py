@@ -1,14 +1,18 @@
-import socket
+import socket,sys
 i = 0
 x = ""
+
 while True:
 	if i%2==0:
 		# print "Client Mode Started"
 		#Reciever Code goes here
 		Sock_Client=socket.socket()
-		host=socket.gethostname()
-		port=12121
 		x=""
+		port=int(sys.argv[2])
+		if sys.argv[1]=="localhost":
+			host=socket.gethostname()
+		else:
+			host=sys.argv[1]
 		Sock_Client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		Sock_Client.connect((host,port))
 		print "Typing..."
@@ -30,14 +34,14 @@ while True:
 		# print "Server Started"
 		#Sender Code goes here
 		Sock_Server=socket.socket()
-		host=socket.gethostname()
-		port=12121
 		Sock_Server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+		host=socket.gethostname()
+		port=int(sys.argv[2])
 		Sock_Server.bind((host,port))
 		x = ""
 		Sock_Server.listen(5)
 		c,addr = Sock_Server.accept()
-		# print 'Got connection from',addr
+		print 'Got connection from',addr
 		while x!="over":
 			x = raw_input('Enter Message:')
 			c.send(x)
